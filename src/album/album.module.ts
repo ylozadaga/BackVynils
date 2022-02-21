@@ -1,12 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Module, CacheModule } from '@nestjs/common';
 import { AlbumController } from './album.controller';
 import { AlbumService } from './album.service';
 import { Album } from './album.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Album])],
+  imports: [
+    CacheModule.register({ ttl: 5, max: 100 }),
+    TypeOrmModule.forFeature([Album]),
+  ],
   controllers: [AlbumController],
-  providers: [AlbumService]
+  providers: [AlbumService],
 })
-export class AlbumModule { }
+export class AlbumModule {}
