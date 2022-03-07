@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Album } from "./album/album.entity";
-import { Comment } from "./comment/comment.entity";
-import { Prize } from "./prize/prize.entity";
-import { Track } from "./track/track.entity";
+import { Album } from './album/album.entity';
+import { Comment } from './comment/comment.entity';
+import { Prize } from './prize/prize.entity';
+import { Track } from './track/track.entity';
 import { CollectorAlbum } from './collectoralbum/collectoralbum.entity';
 import { Band } from './band/band.entity';
 import { Collector } from './collector/collector.entity';
@@ -31,9 +31,11 @@ import { BandAlbumModule } from './bandalbum/bandalbum.module';
 import { CollectorPerformerModule } from './collectorperformer/collectorperformer.module';
 import { AlbumBandModule } from './albumband/albumband.module';
 import { AlbumMusicianModule } from './albummusician/albummusician.module';
+import { AuthModule } from './auth/auth.module';
+import { User } from './auth/user.entity';
 
 @Module({
-  imports: [  
+  imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
@@ -41,7 +43,19 @@ import { AlbumMusicianModule } from './albummusician/albummusician.module';
       username: 'postgres',
       password: 'postgres',
       database: 'vinyls',
-      entities: [Album, CollectorAlbum, Band, Collector, Comment, Musician, Performer, PerformerPrize, Prize, Track,],
+      entities: [
+        Album,
+        CollectorAlbum,
+        Band,
+        Collector,
+        Comment,
+        Musician,
+        Performer,
+        PerformerPrize,
+        Prize,
+        Track,
+        User,
+      ],
       dropSchema: true,
       synchronize: true,
       keepConnectionAlive: true,
@@ -66,6 +80,8 @@ import { AlbumMusicianModule } from './albummusician/albummusician.module';
     BandAlbumModule,
     CollectorPerformerModule,
     AlbumBandModule,
-    AlbumMusicianModule],
+    AlbumMusicianModule,
+    AuthModule,
+  ],
 })
-export class AppModule { }
+export class AppModule {}
