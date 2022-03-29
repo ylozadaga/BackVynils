@@ -12,9 +12,7 @@ import {
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { AlbumDTO } from './album.dto';
-
 import { BusinessErrorsInterceptor } from '../interceptors/interceptor';
-import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 @Controller('albums')
 @UseInterceptors(BusinessErrorsInterceptor)
