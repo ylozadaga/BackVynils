@@ -5,6 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Album } from './album.entity';
 import { plainToInstance } from 'class-transformer';
 import { AlbumDTO } from './album.dto';
+import { BusinessLogicException } from '../shared/errors/business-errors';
 
 export type MockType<T> = {
   [P in keyof T]?: jest.Mock<{}>;
@@ -69,14 +70,23 @@ describe('AlbumService', () => {
 
   it('deberia actualizar un album', async () => {
     let album = albumExample;
-    album.name = "Nuevo nombre";
+    album.name = 'Nuevo nombre';
     albumRepository.save.mockReturnValue(album);
     albumRepository.findOne.mockReturnValue(albumExample);
-    expect(await albumService.update(album.id, plainToInstance(AlbumDTO, album))).toBe(
-      album,
-    );
+    expect(
+      await albumService.update(album.id, plainToInstance(AlbumDTO, album)),
+    ).toBe(album);
   });
 
+  it('no deberia actualizar un album que no existe', async () => {
+    let album = albumExample;
+    albumRepository.findOne.mockReturnValue(undefined);
+    try {
+      await albumService.update(0, plainToInstance(AlbumDTO, album));
+    } catch (error) {
+      expect(error).toBeInstanceOf(BusinessLogicException);
+    }
+  });
   it('deberia borrar un album', async () => {
     albumRepository.findOne.mockReturnValue(albumExample);
     expect(await albumService.delete(albumExample.id)).toBe(undefined);
